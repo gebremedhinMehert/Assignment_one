@@ -31,17 +31,24 @@ public class Connector {
 
     }
 
+    /**
+     * Generate an email that lists of customer.
+     * Update the customer record with a time-stamp showing when the email was sent.
+     */
+
     public static void sendingEmail() throws Exception {
 
 
         String smtServer = "exchange.heb.com";
-
+        // email ID of Recipient.
         String emailID = "gebremedhin.mehert@heb.com";
+        // Getting system properties
         Properties props = System.getProperties();
         props.put( "mail.smtp.host", smtServer );
+        // creating session object to get properties
         Session session = Session.getInstance( props, null );
+        // converting List to String
         List<Customer> customersList = getAllCustomer();
-
         String list = customersList.toString().replace( "[", "" )
                 .replace( ",", "" ).replace( "]", "" );
         EmailService.sendEmail( session, emailID, "Email sending Testing ", list );
@@ -69,6 +76,7 @@ public class Connector {
 
 
             while (result.next()) {
+                // ... get column values from this record
                 Address address = new Address();
                 Customer customer = new Customer( address );
                 customer.setId( result.getInt( "id" ) );
@@ -81,7 +89,6 @@ public class Connector {
                 customer.getAdd().setState( result.getString( "state" ) );
                 customer.getAdd().setZipCode( result.getInt( "zip_code" ) );
                 customersList.add( customer );
-
 
             }
 
@@ -100,7 +107,6 @@ public class Connector {
      * creating sql database connection
      */
     public static Connection getConnection() throws Exception {
-
         try {
 
             String driver = "com.mysql.cj.jdbc.Driver";
@@ -114,8 +120,6 @@ public class Connector {
         } catch (Exception e) {
             logger.error( e.getMessage() );
         }
-
-
         return null;
 
     }
